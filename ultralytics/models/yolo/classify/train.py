@@ -156,3 +156,15 @@ class ClassificationTrainer(BaseTrainer):
             fname=self.save_dir / f"train_batch{ni}.jpg",
             on_plot=self.on_plot,
         )
+    def freeze_layer(trainer):
+        ''freeze''
+        model = trainer.model
+        num_freeze = 10
+        print(f"Freezing {num_freeze} layers")
+        freeze = [f'model.{x}.' for x in range(num_freeze)]  # layers to freeze 
+        for k, v in model.named_parameters(): 
+            v.requires_grad = True  # train all layers 
+            if any(x in k for x in freeze): 
+                print(f'freezing {k}') 
+                v.requires_grad = False 
+        print(f"{num_freeze} layers are freezed.")
